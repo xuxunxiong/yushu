@@ -3,8 +3,9 @@ from app.libs.helper import is_isbn_or_key
 from app.spider.yushu_book import YuShuBook
 from flask import jsonify, request, flash, render_template
 
-from app.view_models.book import BookViewModel
+from app.view_models.book import BookViewModel, BookCollection
 from . import web
+import json
 
 
 # 蓝图
@@ -23,24 +24,28 @@ def search():
     # page = request.args['page']
 
     form = SearchForm(request.args)
-    result = dict()
+    books = BookCollection()
     if form.validate():
         q = form.q.data.strip()
         page = form.page.data
         isbn_or_key = is_isbn_or_key(q)
         if isbn_or_key == 'isbn':
-            result = YuShuBook.search_by_isbn(q)
-            result = BookViewModel.package_single(result, q)
+            yushu_book = YuShuBook()
+            yushu_book.search_by_isbn(q)
+            books.fill(yushu_book, q)
+            # result = BookViewModel.package_single(result, q)
         if isbn_or_key == 'key':
-            result = YuShuBook.search_by_key(q, page)
-            result = BookViewModel.package_collection(result, q)
+            yushu_book = YuShuBook()
+            yushu_book.search_by_key(q, page)
+            books.fill(yushu_book, q)
 
         # return json.dumps(result), 200, {'content-type': 'application/json'}
 
     else:
         flash('there is no result')
 
-    return render_template('search_result.html', books=result)
+    # return render_template('search_result.html', books=books)
+    return json.dumps(books, default=lambda obj: obj.__dict__)
 
 
 @web.route('/book/<isbn>/')
