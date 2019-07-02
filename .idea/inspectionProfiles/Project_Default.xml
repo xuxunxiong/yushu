@@ -5,6 +5,7 @@
       <option name="ignoredIdentifiers">
         <list>
           <option value="app.web.book.web" />
+          <option value="app.models.user.base" />
         </list>
       </option>
     </inspection_tool>
