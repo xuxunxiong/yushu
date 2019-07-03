@@ -6,6 +6,7 @@
         <list>
           <option value="app.web.book.web" />
           <option value="app.models.user.base" />
+          <option value="app.models.user.login_manager" />
         </list>
       </option>
     </inspection_tool>

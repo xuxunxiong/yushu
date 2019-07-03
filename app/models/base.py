@@ -10,6 +10,6 @@ class Base(db.Model):
     status = Column(SmallInteger, default=1)
 
     def set_attrs(self, attrs_dic):
-        for key, value in attrs_dic.item():
+        for key, value in attrs_dic.items():
             if hasattr(self, key) and key != 'id':
                 setattr(self, key, value)
